@@ -14,14 +14,14 @@ To get your password run:
 
 Check the cluster status by running:
 
-   kubectl exec -it --namespace {{ .Release.Namespace }} $(kubectl get pods --namespace {{ .Release.Namespace }} -l app={{ include "common.names.name" . }},release={{ .Release.Name }} -o jsonpath='{.items[0].metadata.name}') nodetool status
+   arvan paas exec -it --namespace {{ .Release.Namespace }} $(arvan paas get pods --namespace {{ .Release.Namespace }} -l app={{ include "common.names.name" . }},release={{ .Release.Name }} -o jsonpath='{.items[0].metadata.name}') nodetool status
 
 To connect to your Cassandra cluster using CQL:
 
 1. Run a Cassandra pod that you can use as a client:
 
-   kubectl run --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }}-client --rm --tty -i --restart='Never' \
-   --env CASSANDRA_PASSWORD=$CASSANDRA_PASSWORD \
+   arvan paas run --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }}-client --rm --tty -i --restart='Never' \
+   --env CASSANDRA_PASSWORD=$CASSANDRA_PASSWORD  --limits 'cpu=100m,memory=128Mi,ephemeral-storage=256M' --requests 'cpu=100m,memory=128Mi,ephemeral-storage=256M' \
    {{ if and (.Values.networkPolicy.enabled) (not .Values.networkPolicy.allowExternal) }}--labels="{{ include "common.names.name" . }}-client=true"{{ end }} \
    --image {{ include "cassandra.image" . }} -- bash
 
@@ -40,22 +40,22 @@ To connect to your database from outside the cluster execute the following comma
 
 {{- if contains "NodePort" .Values.service.type }}
 
-   export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
-   export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "common.names.fullname" . }})
+   export NODE_IP=$(arvan paas get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+   export NODE_PORT=$(arvan paas get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "common.names.fullname" . }})
 
    cqlsh -u {{ .Values.dbUser.user }} -p $CASSANDRA_PASSWORD $NODE_IP $NODE_PORT
 
 {{- else if contains "LoadBalancer" .Values.service.type }}
 
    NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-         Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ include "common.names.fullname" . }}'
+         Watch the status with: 'arvan paas get svc --namespace {{ .Release.Namespace }} -w {{ include "common.names.fullname" . }}'
 
-   export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+   export SERVICE_IP=$(arvan paas get svc --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
    cqlsh -u {{ .Values.dbUser.user }} -p $CASSANDRA_PASSWORD $SERVICE_IP
 
 {{- else if contains "ClusterIP" .Values.service.type }}
 
-   kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "common.names.fullname" . }} {{ .Values.service.port }}:{{ .Values.service.port }} &
+   arvan paas port-forward --namespace {{ .Release.Namespace }} svc/{{ include "common.names.fullname" . }} {{ .Values.service.port }}:{{ .Values.service.port }} &
    cqlsh -u {{ .Values.dbUser.user }} -p $CASSANDRA_PASSWORD 127.0.0.1 {{ .Values.service.port }}
 
 {{- end }}
