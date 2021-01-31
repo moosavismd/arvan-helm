@@ -1,6 +1,6 @@
 dependencies:
 - name: common
-  repository: https://charts.bitnami.com/bitnami
-  version: 1.x.x
-digest: sha256:ec87fe582887aed7d95eb4352445df24eb7068e25cccf6185b7f45d1ed1ee624
-generated: "2021-01-31T13:44:29.759347+03:30"
+  repository: https://buckbuckgo.s3.ir-thr-at1.arvanstorage.com
+  version: 1.3.7
+digest: sha256:acef6deebe736ea3fd1fc5619009bb588444473084cf669af40ee9c6a1ad9e35
+generated: "2021-02-01T01:30:23.0427293+03:30"
