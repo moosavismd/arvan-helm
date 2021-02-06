@@ -4,7 +4,7 @@ apiVersion: v2
 appVersion: 11.10.0
 dependencies:
   - name: common
-    repository: https://charts.bitnami.com/bitnami
+    repository: https://buckbuckgo.s3.ir-thr-at1.arvanstorage.com
     version: 1.x.x
 description: Chart for PostgreSQL, an object-relational database management system (ORDBMS) with an emphasis on extensibility and on standards-compliance.
 engine: gotpl

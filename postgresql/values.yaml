@@ -84,14 +84,14 @@ volumePermissions:
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 ##
 securityContext:
-  enabled: true
+  enabled: false
   fsGroup: 1001
 
 ## Container Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 ##
 containerSecurityContext:
-  enabled: true
+  enabled: false
   runAsUser: 1001
 
 ## Pod Service Account
@@ -337,7 +337,7 @@ ldap:
 service:
   ## PosgresSQL service type
   ##
-  type: ClusterIP
+  type: LoadBalancer
   # clusterIP: None
   port: 5432
 
@@ -627,6 +627,11 @@ resources:
   requests:
     memory: 256Mi
     cpu: 250m
+    ephemeral-storage: 512M
+  limits:
+    memory: 256Mi
+    cpu: 250m
+    ephemeral-storage: 512M
 
 ## Add annotations to all the deployed resources
 ##
