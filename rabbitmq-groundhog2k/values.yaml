@@ -43,7 +43,7 @@ securityContext:
 
 ## Default RabbitMq service ports (default: AMQP port 5672, Management UI port 15672)
 service:
-  type: ClusterIP
+  type: LoadBalancer
   amqp:
     port: 5672
     ## The node port (only relevant for type LoadBalancer or NodePort)
@@ -79,13 +79,15 @@ ingress:
   #      - chart-example.local
 
 ## Resource limits and requests
-resources: {}
-# limits:
-#    cpu: 100m
-#    memory: 512Mi
-# requests:
-#    cpu: 100m
-#    memory: 128Mi
+resources:
+ limits:
+    ephemeral-storage: 1G
+    cpu: 100m
+    memory: 512Mi
+ requests:
+    ephemeral-storage: 1G
+    cpu: 100m
+    memory: 128Mi
 
 ## Additional node selector
 nodeSelector: {}
@@ -119,13 +121,13 @@ readinessProbe:
 
 ## Service account (necessary in cluster mode)
 serviceAccount:
-  create: true
+  create: false
   ## The name of the ServiceAccount to use. (If not set and create is true, a name is generated using the rabbitmq.fullname template)
   # name:
 
 ## Create RBAC (necessary in cluster mode)
 rbac:
-  create: true
+  create: false
 
 ## Additional environment variables
 env: []
