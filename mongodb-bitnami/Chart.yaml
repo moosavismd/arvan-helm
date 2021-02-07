@@ -22,7 +22,7 @@ keywords:
 maintainers:
   - email: containers@bitnami.com
     name: Bitnami
-name: mongodb
+name: mongodb-bitnami
 sources:
   - https://github.com/bitnami/bitnami-docker-mongodb
   - https://mongodb.org

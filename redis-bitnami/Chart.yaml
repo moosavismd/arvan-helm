@@ -21,7 +21,7 @@ maintainers:
     name: Bitnami
   - email: cedric@desaintmartin.fr
     name: desaintmartin
-name: redis
+name: redis-bitnami
 sources:
   - https://github.com/bitnami/bitnami-docker-redis
   - http://redis.io/

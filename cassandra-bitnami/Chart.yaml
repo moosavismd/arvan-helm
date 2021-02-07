@@ -19,7 +19,7 @@ keywords:
 maintainers:
   - email: containers@bitnami.com
     name: Bitnami
-name: cassandra
+name: cassandra-bitnami
 sources:
   - https://github.com/bitnami/bitnami-docker-cassandra
   - http://cassandra.apache.org
