@@ -8,7 +8,7 @@ To access NGINX from outside the cluster, follow the steps below:
 
 {{- if .Values.route.enabled }}
 
-  You should be able to get your new Apache installation route through:  
+**  You should be able to get your new Apache installation route through:  
 
   arvan paas get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.host}" route {{ template "common.names.fullname" . }}
 
