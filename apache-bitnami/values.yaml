@@ -158,13 +158,14 @@ resources:
   # choice for the user. This also increases chances charts run on environments with little
   # resources, such as Minikube. If you do want to specify resources, uncomment the following
   # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  limits: {}
-  #   cpu: 100m
-  #   memory: 128Mi
-  requests: {}
-  #   cpu: 100m
-  #   memory: 128Mi
-
+  limits:
+    cpu: 100m
+    memory: 128Mi
+    ephemeral-storage: 1G
+  requests:
+    cpu: 100m
+    memory: 128Mi
+    ephemeral-storage: 1G
 ## Apache container's liveness and readiness probes
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
 ##
@@ -252,7 +253,27 @@ ingress:
   # - name: apache.local-tls
   #   key:
   #   certificate:
-
+route:
+  ## If true, Apache server Route will be created (Use it instead of Ingress)
+  ##
+  enabled: true
+  ## Apache server Route annotations
+  ##
+  annotations: {}
+  ## Apache server Route additional labels
+  ##
+  extraLabels: {}
+  ## Apache server Route hostnames with optional path
+  ## 
+  host: {}
+  #   - apache.domain.com
+  ## Apache server Route tls config
+  ## 
+  tls:
+    ## values: Allow, Redirect, None
+    insecureEdgeTerminationPolicy: Allow
+    
+   
 ## Prometheus Exporter / Metrics
 ##
 metrics:
@@ -286,11 +307,11 @@ metrics:
     # resources, such as Minikube. If you do want to specify resources, uncomment the following
     # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
     limits: {}
-    #   cpu: 100m
-    #   memory: 128Mi
-    requests: {}
-    #   cpu: 100m
-    #   memory: 128Mi
+    #  cpu: 100m
+    #  memory: 128Mi
+    requests: {} 
+    #  cpu: 100m
+    #  memory: 128Mi
 
 ## Array to add extra volumes (evaluated as a template)
 ##

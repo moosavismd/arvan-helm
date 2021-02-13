@@ -4,7 +4,7 @@ apiVersion: v2
 appVersion: 2.4.46
 dependencies:
   - name: common
-    repository: https://charts.bitnami.com/bitnami
+    repository: https://buckbuckgo.s3.ir-thr-at1.arvanstorage.com
     tags:
       - bitnami-common
     version: 1.x.x
@@ -22,7 +22,7 @@ keywords:
 maintainers:
   - email: containers@bitnami.com
     name: Bitnami
-name: apache
+name: apache-bitnami
 sources:
   - https://github.com/bitnami/bitnami-docker-apache
   - https://httpd.apache.org
