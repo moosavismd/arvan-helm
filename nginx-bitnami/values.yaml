@@ -250,13 +250,14 @@ resources:
   # choice for the user. This also increases chances charts run on environments with little
   # resources, such as Minikube. If you do want to specify resources, uncomment the following
   # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  limits: {}
-  #   cpu: 100m
-  #   memory: 128Mi
-  requests: {}
-  #   cpu: 100m
-  #   memory: 128Mi
-
+  limits:
+    cpu: 100m
+    memory: 128Mi
+    ephemeral-storage: 512M
+  requests:
+    cpu: 100m
+    memory: 128Mi
+    ephemeral-storage: 512M
 ## NGINX containers' liveness and readiness probes.
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
 ##
@@ -499,6 +500,26 @@ sidecars:
 ## Extra init containers
 ##
 initContainers:
+
+route:
+  ## If true, Nginx server Route will be created (Use it instead of Ingress)
+  ##
+  enabled: true
+  ## Nginx server Route annotations
+  ##
+  annotations: {}
+  ## Nginx server Route additional labels
+  ##
+  extraLabels: {}
+  ## Nginx server Route hostnames with optional path
+  ##
+  host: {}
+  #   - nginx.domain.com
+  ## Nginx server Route tls config
+  ##
+  tls:
+    ## values: Allow, Redirect, None
+    insecureEdgeTerminationPolicy: Allow
 
 ## Configure the ingress resource that allows you to access the
 ## Nginx installation. Set up the URL
