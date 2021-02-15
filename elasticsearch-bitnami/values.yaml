@@ -71,13 +71,14 @@ sysctlImage:
     # choice for the user. This also increases chances charts run on environments with little
     # resources, such as Minikube. If you do want to specify resources, uncomment the following
     # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    limits: {}
-    #   cpu: 100m
-    #   memory: 128Mi
-    requests: {}
-    #   cpu: 100m
-    #   memory: 128Mi
-
+    limits:
+      cpu: 100m
+      memory: 200Mi
+      ephemeral-storage: 300M
+    requests:
+      cpu: 100m
+      memory: 200Mi
+      ephemeral-storage: 300M
 ## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
 ##
@@ -186,7 +187,7 @@ master:
   name: master
   ## Number of master-eligible node(s) replicas to deploy
   ##
-  replicas: 2
+  replicas: 1
 
   ## updateStrategy for ElasticSearch master statefulset
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
@@ -199,7 +200,7 @@ master:
   ##
   hostAliases: []
 
-  heapSize: 128m
+  heapSize: 1G
   ## Provide annotations for master-eligible pods.
   ##
   podAnnotations: {}
@@ -212,7 +213,7 @@ master:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ##
   securityContext:
-    enabled: true
+    enabled: false
     fsGroup: 1001
     runAsUser: 1001
   ## Pod affinity preset
@@ -272,12 +273,14 @@ master:
     ## choice for the user. This also increases chances charts run on environments with little
     ## resources, such as Minikube.
     ##
-    limits: {}
-    #   cpu: 100m
-    #   memory: 384Mi
+    limits:
+      cpu: 300m
+      memory: 2G
+      ephemeral-storage: 1G
     requests:
-      cpu: 25m
-      memory: 256Mi
+      cpu: 300m
+      memory: 2G
+      ephemeral-storage: 1G
   ## Elasticsearch master-eligible container's liveness and readiness probes
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
@@ -337,7 +340,7 @@ master:
       - ReadWriteOnce
     ## Persistent Volume size
     ##
-    size: 8Gi
+    size: 2Gi
 
   ## Service parameters for master-eligible node(s)
   ##
@@ -376,7 +379,7 @@ master:
 coordinating:
   ## Number of coordinating-only node(s) replicas to deploy
   ##
-  replicas: 2
+  replicas: 0
 
   ## Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
@@ -389,7 +392,7 @@ coordinating:
   updateStrategy:
     type: RollingUpdate
 
-  heapSize: 128m
+  heapSize: 1G
   ## Provide annotations for the coordinating-only pods.
   ##
   podAnnotations: {}
@@ -402,7 +405,7 @@ coordinating:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ##
   securityContext:
-    enabled: true
+    enabled: false
     fsGroup: 1001
     runAsUser: 1001
   ## Pod affinity preset
@@ -462,12 +465,14 @@ coordinating:
     ## choice for the user. This also increases chances charts run on environments with little
     ## resources, such as Minikube.
     ##
-    limits: {}
-    #   cpu: 100m
-    #   memory: 384Mi
+    limits:
+      cpu: 300m
+      memory: 2G
+      ephemeral-storage: 1G
     requests:
-      cpu: 25m
-      memory: 256Mi
+      cpu: 300m
+      memory: 2G
+      ephemeral-storage: 1G
   ## Elasticsearch coordinating-only container's liveness and readiness probes
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##
@@ -548,7 +553,7 @@ data:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ##
   securityContext:
-    enabled: true
+    enabled: false
     fsGroup: 1001
     runAsUser: 1001
   ## Pod affinity preset
@@ -608,12 +613,14 @@ data:
     ## choice for the user. This also increases chances charts run on environments with little
     ## resources, such as Minikube.
     ##
-    limits: {}
-    #   cpu: 100m
-    #   memory: 2176Mi
+    limits:
+      cpu: 300m
+      memory: 2G
+      ephemeral-storage: 1G
     requests:
-      cpu: 25m
-      memory: 2048Mi
+      cpu: 300m
+      memory: 2G
+      ephemeral-storage: 1G
   ## Elasticsearch data container's liveness and readiness probes
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ##

@@ -23,7 +23,7 @@
     To check whether the host machine meets the requirements, run the command
     below:
 
-      kubectl logs --namespace {{ .Release.Namespace }} $(kubectl get --namespace {{ .Release.Namespace }} \
+      arvan paas logs --namespace {{ .Release.Namespace }} $(arvan paas get --namespace {{ .Release.Namespace }} \
         pods -l app={{ template "elasticsearch.name" . }},role=master -o jsonpath='{.items[0].metadata.name}') \
 	elasticsearch
 
@@ -66,7 +66,7 @@
   The Jobs will not be removed automagically when deleting this Helm chart.
   To remove these jobs, run the following:
 
-    kubectl -n {{ .Release.Namespace }} delete job -l app={{ template "elasticsearch.name" . }},role=curator
+    arvan paas -n {{ .Release.Namespace }} delete job -l app={{ template "elasticsearch.name" . }},role=curator
 
 {{- end }}
 
@@ -76,19 +76,19 @@
 
 {{- if contains "NodePort" .Values.coordinating.service.type }}
 
-    export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "elasticsearch.coordinating.fullname" . }})
-    export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+    export NODE_PORT=$(arvan paas get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "elasticsearch.coordinating.fullname" . }})
+    export NODE_IP=$(arvan paas get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
     curl http://$NODE_IP:$NODE_PORT/
 {{- else if contains "LoadBalancer" .Values.coordinating.service.type }}
 
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "elasticsearch.coordinating.fullname" . }}'
+        Watch the status with: 'arvan paas get svc --namespace {{ .Release.Namespace }} -w {{ template "elasticsearch.coordinating.fullname" . }}'
 
-    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "elasticsearch.coordinating.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+    export SERVICE_IP=$(arvan paas get svc --namespace {{ .Release.Namespace }} {{ template "elasticsearch.coordinating.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
     curl http://$SERVICE_IP:{{ .Values.coordinating.service.port }}/
 {{- else if contains "ClusterIP"  .Values.coordinating.service.type }}
 
-    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "elasticsearch.coordinating.fullname" . }} {{ .Values.coordinating.service.port }}:9200 &
+    arvan paas port-forward --namespace {{ .Release.Namespace }} svc/{{ template "elasticsearch.coordinating.fullname" . }} {{ .Values.coordinating.service.port }}:9200 &
     curl http://127.0.0.1:9200/
 {{- end }}
 

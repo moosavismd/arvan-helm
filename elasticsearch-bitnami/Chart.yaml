@@ -4,13 +4,13 @@ apiVersion: v2
 appVersion: 7.10.2
 dependencies:
   - name: common
-    repository: https://charts.bitnami.com/bitnami
+    repository: https://buckbuckgo.s3.ir-thr-at1.arvanstorage.com
     tags:
       - bitnami-common
     version: 1.x.x
   - condition: global.kibanaEnabled
-    name: kibana
-    repository: https://charts.bitnami.com/bitnami
+    name: kibana-bitnami
+    repository: https://buckbuckgo.s3.ir-thr-at1.arvanstorage.com
     version: 7.x.x
 description: A highly scalable open-source full-text search and analytics engine
 engine: gotpl
@@ -21,7 +21,7 @@ keywords:
 maintainers:
   - email: containers@bitnami.com
     name: Bitnami
-name: elasticsearch
+name: elasticsearch-bitnami
 sources:
   - https://github.com/bitnami/bitnami-docker-elasticsearch
   - https://www.elastic.co/products/elasticsearch
