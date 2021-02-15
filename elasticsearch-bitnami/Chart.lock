@@ -1,9 +1,9 @@
 dependencies:
 - name: common
-  repository: https://charts.bitnami.com/bitnami
+  repository: https://buckbuckgo.s3.ir-thr-at1.arvanstorage.com
   version: 1.3.7
-- name: kibana
-  repository: https://charts.bitnami.com/bitnami
+- name: kibana-bitnami
+  repository: https://buckbuckgo.s3.ir-thr-at1.arvanstorage.com
   version: 7.2.1
-digest: sha256:e30fcb4d06d47393ae38c24cf8be125b51c6c8656f7b9069bb6cb532f651e738
-generated: "2021-01-27T23:37:55.770200361Z"
+digest: sha256:c412bf5ce15b3273be214101ddb83374cfdfb17bfac18a44f7329552d5aaee03
+generated: "2021-02-15T11:29:54.483852+03:30"

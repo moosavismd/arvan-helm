@@ -48,7 +48,7 @@ image:
 ## ref: https://hub.docker.com/r/bitnami/minideb/tags/
 ##
 sysctlImage:
-  enabled: true
+  enabled: false
   registry: docker.io
   repository: bitnami/minideb
   tag: buster
@@ -379,7 +379,7 @@ master:
 coordinating:
   ## Number of coordinating-only node(s) replicas to deploy
   ##
-  replicas: 0
+  replicas: 1
 
   ## Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
