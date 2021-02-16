@@ -31,19 +31,12 @@ Return true if the deployment should include dashboards
 {{- end -}}
 
 {{/*
-Set Elasticsearch URL.
+Set Elasticsearch Host.
 */}}
-{{- define "kibana.elasticsearch.url" -}}
-{{- if .Values.elasticsearch.hosts -}}
-{{- $totalHosts := len .Values.elasticsearch.hosts -}}
-{{- $protocol := ternary "https" "http" .Values.elasticsearch.tls -}}
-{{- range $i, $hostTemplate := .Values.elasticsearch.hosts -}}
-{{- $host := tpl $hostTemplate $ }}
-{{- printf "%s://%s:%s" $protocol $host (include "kibana.elasticsearch.port" $) -}}
-{{- if (lt ( add1 $i ) $totalHosts ) }}{{- printf "," -}}{{- end }}
+{{- define "kibana.elasticsearch.host" -}}
+{{- .Values.elasticsearch.host -}}
 {{- end -}}
-{{- end -}}
-{{- end -}}
+
 
 {{/*
 Set Elasticsearch Port.

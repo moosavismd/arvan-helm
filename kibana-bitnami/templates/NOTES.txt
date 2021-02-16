@@ -5,7 +5,7 @@
 
 Complete your Kibana deployment by running:
 
-  helm upgrade {{ .Release.Name }} arvan/kibana \
+  helm upgrade {{ .Release.Name }} arvan/kibana-bitnami \
     --set elasticsearch.hosts[0]=YOUR_ES_HOST,elasticsearch.port=YOUR_ES_PORT
 
 Replacing "YOUR_ES_HOST" and "YOUR_ES_PORT" placeholders by the proper values of your Elasticsearch deployment.
@@ -19,7 +19,9 @@ Replacing "YOUR_ES_HOST" and "YOUR_ES_PORT" placeholders by the proper values of
 
   arvan paas get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.host}" route {{ template "common.names.fullname" . }}
 
+
 {{- end }}
+
 
 {{- if .Values.ingress.enabled }}
   Get the Kibana URL and associate Kibana hostname to your cluster external IP:
