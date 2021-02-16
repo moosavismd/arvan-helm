@@ -1,4 +1,4 @@
-{{- if and .Values.elasticsearch.hosts .Values.elasticsearch.port -}}
+{{- if and .Values.elasticsearch.host .Values.elasticsearch.port -}}
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
