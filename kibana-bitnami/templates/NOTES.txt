@@ -1,28 +1,24 @@
-{{- if or (not .Values.elasticsearch.host) (not .Values.elasticsearch.port) -}}
+{{- if or (not .Values.elasticsearch.hosts) (not .Values.elasticsearch.port) -}}
 ######################################################################################################
 ### ERROR: You did not provide the Elasticsearch external host or port in your 'helm install' call ###
 ######################################################################################################
-{{- else -}}
 
 Complete your Kibana deployment by running:
 
-  helm upgrade {{ .Release.Name }} arvan/kibana-bitnami \
-    --set elasticsearch.host=YOUR_ES_HOST,elasticsearch.port=YOUR_ES_PORT
+  helm upgrade {{ .Release.Name }} bitnami/kibana \
+    --set "elasticsearch.hosts[0]"=YOUR_ES_HOST,elasticsearch.port=YOUR_ES_PORT
 
 Replacing "YOUR_ES_HOST" and "YOUR_ES_PORT" placeholders by the proper values of your Elasticsearch deployment.
 
+{{- else -}}
 1. Get the application URL by running these commands:
-
 {{- if .Values.route.enabled }}
 
-**  You should be able to get your new Apache installation route through:
+  ** You should be able to get your new Apache installation route through:
 
   arvan paas get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.host}" route {{ template "common.names.fullname" . }}
 
-
 {{- end }}
-
-
 {{- if .Values.ingress.enabled }}
   Get the Kibana URL and associate Kibana hostname to your cluster external IP:
 

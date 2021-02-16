@@ -31,12 +31,19 @@ Return true if the deployment should include dashboards
 {{- end -}}
 
 {{/*
-Set Elasticsearch Host.
+Set Elasticsearch URL.
 */}}
 {{- define "kibana.elasticsearch.url" -}}
-{{- .Values.elasticsearch.host -}}
+{{- if .Values.elasticsearch.hosts -}}
+{{- $totalHosts := len .Values.elasticsearch.hosts -}}
+{{- $protocol := ternary "https" "http" .Values.elasticsearch.tls -}}
+{{- range $i, $hostTemplate := .Values.elasticsearch.hosts -}}
+{{- $host := tpl $hostTemplate $ }}
+{{- printf "%s://%s:%s" $protocol $host (include "kibana.elasticsearch.port" $) -}}
+{{- if (lt ( add1 $i ) $totalHosts ) }}{{- printf "," -}}{{- end }}
 {{- end -}}
-
+{{- end -}}
+{{- end -}}
 
 {{/*
 Set Elasticsearch Port.
@@ -98,17 +105,17 @@ Compile all warnings into a single message, and call fail.
 
 {{/* Validate values of Kibana - must provide an ElasticSearch */}}
 {{- define "kibana.validateValues.noElastic" -}}
-{{- if and (not .Values.elasticsearch.host) (not .Values.elasticsearch.port) -}}
+{{- if and (not .Values.elasticsearch.hosts) (not .Values.elasticsearch.port) -}}
 kibana: no-elasticsearch
     You did not specify an external Elasticsearch instance.
-    Please set elasticsearch.host and elasticsearch.port
-{{- else if and (not .Values.elasticsearch.host) .Values.elasticsearch.port }}
+    Please set elasticsearch.hosts and elasticsearch.port
+{{- else if and (not .Values.elasticsearch.hosts) .Values.elasticsearch.port }}
 kibana: missing-es-settings-host
     You specified the external Elasticsearch port but not the host. Please
-    set elasticsearch.host
-{{- else if and .Values.elasticsearch.host (not .Values.elasticsearch.port) }}
+    set elasticsearch.hosts
+{{- else if and .Values.elasticsearch.hosts (not .Values.elasticsearch.port) }}
 kibana: missing-es-settings-port
-    You specified the external Elasticsearch host but not the port. Please
+    You specified the external Elasticsearch hosts but not the port. Please
     set elasticsearch.port
 {{- end -}}
 {{- end -}}

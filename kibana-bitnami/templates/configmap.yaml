@@ -1,4 +1,4 @@
-{{- if and (not .Values.configurationCM) (and .Values.elasticsearch.host .Values.elasticsearch.port) }}
+{{- if and (not .Values.configurationCM) (and .Values.elasticsearch.hosts .Values.elasticsearch.port) }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -9,7 +9,7 @@ data:
     pid.file: /opt/bitnami/kibana/tmp/kibana.pid
     server.host: "::"
     server.port: 5601
-    elasticsearch.host: [{{ include "kibana.elasticsearch.url" . }}]
+    elasticsearch.hosts: [{{ include "kibana.elasticsearch.url" . }}]
     {{- if .Values.configuration.server.basePath }}
     server.basePath: {{ .Values.configuration.server.basePath | quote }}
     {{- end }}

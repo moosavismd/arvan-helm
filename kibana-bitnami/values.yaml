@@ -300,26 +300,26 @@ ingress:
   ##   key:
   ##   certificate:
   ##
+
 route:
-  ## If true, Nginx server Route will be created (Use it instead of Ingress)
+  ## If true, Apache server Route will be created (Use it instead of Ingress)
   ##
   enabled: true
-  ## Nginx server Route annotations
+  ## Apache server Route annotations
   ##
   annotations: {}
-  ## Nginx server Route additional labels
+  ## Apache server Route additional labels
   ##
   extraLabels: {}
-  ## Nginx server Route hostnames with optional path
+  ## Apache server Route hostnames with optional path
   ##
   host: {}
-  #   - nginx.domain.com
-  ## Nginx server Route tls config
+  #   - apache.domain.com
+  ## Apache server Route tls config
   ##
   tls:
     ## values: Allow, Redirect, None
-    insecureEdgeTerminationPolicy: Allow
-
+    insecureEdgeTerminationPolicy: Allow 
 ## SecurityContext configuration
 ##
 securityContext:
@@ -331,20 +331,17 @@ securityContext:
 ## Configure resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 ## Example:
-## resources:
-##   requests:
-##     memory: 512Mi
-##     cpu: 300m
-##
 resources:
-  limits:
-    memory: 512Mi
-    cpu: 200m
-    ephemeral-storage: 512M
   requests:
     memory: 512Mi
-    cpu: 200m
+    cpu: 300m
     ephemeral-storage: 512M
+  limits:
+    memory: 512Mi
+    cpu: 300m
+    ephemeral-storage: 512M
+##
+# resources:
 
 ## Pod affinity preset
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
@@ -472,5 +469,7 @@ metrics:
 ##
 elasticsearch:
   tls: false
-  host: elasticsearch-1
+  hosts:
+  - elasticsearch-1
+  - elasticsearch-2
   port: 9200
