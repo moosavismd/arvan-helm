@@ -6,7 +6,7 @@
 
 ```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/kibana --set elasticsearch.hosts[0]=<Hostname of your ES instance> --set elasticsearch.port=<port of your ES instance>
+$ helm install my-release bitnami/kibana --set elasticsearch.host[0]=<Hostname of your ES instance> --set elasticsearch.port=<port of your ES instance>
 ```
 
 ## Introduction
@@ -31,7 +31,7 @@ This chart requires a Elasticsearch instance to work. You can use an already exi
 ```console
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm install my-release \
-  --set elasticsearch.hosts[0]=<Hostname of your ES instance> \
+  --set elasticsearch.host[0]=<Hostname of your ES instance> \
   --set elasticsearch.port=<port of your ES instance> \
   bitnami/kibana
 ```
@@ -148,7 +148,7 @@ The following tables lists the configurable parameters of the kibana chart and t
 | `metrics.serviceMonitor.interval`      | Interval at which metrics should be scraped.                                                                                                                                                                                                                                                                   | `nil` (Prometheus Operator default value)                                                               |
 | `metrics.serviceMonitor.scrapeTimeout` | Timeout after which the scrape is ended                                                                                                                                                                                                                                                                        | `nil` (Prometheus Operator default value)                                                               |
 | `metrics.serviceMonitor.selector`      | Prometheus instance selector labels                                                                                                                                                                                                                                                                            | `nil`                                                                                                   |
-| `elasticsearch.hosts`                  | Array containing the hostnames for the already existing Elasticsearch instances                                                                                                                                                                                                                                | `nil`                                                                                                   |
+| `elasticsearch.host`                  | Array containing the hostnames for the already existing Elasticsearch instances                                                                                                                                                                                                                                | `nil`                                                                                                   |
 | `elasticsearch.port`                   | Port for the accessing external Elasticsearch instances                                                                                                                                                                                                                                                        | `nil`                                                                                                   |
 | `elasticsearch.tls`                    | Is elasticsearch run with tls support                                                                                                                                                                                                                                                                          | `false`                                                                                                 |
 | `configuration.server.basePath`        | Enables you to specify a path to mount Kibana at if you are running behind a proxy. Use the `configuration.server.rewriteBasePath` setting to tell Kibana if it should remove the basePath from requests it receives, and to prevent a deprecation warning at startup. This setting cannot end in a slash (/). | `""`                                                                                                    |
@@ -225,7 +225,7 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 For advanced operations, the Bitnami Kibana charts allows using custom init scripts that will be mounted in `/docker-entrypoint.init-db`. You can use a ConfigMap or a Secret (in case of sensitive data) for mounting these extra scripts. Then use the `initScriptsCM` and `initScriptsSecret` values.
 
 ```console
-elasticsearch.hosts[0]=elasticsearch-host
+elasticsearch.host[0]=elasticsearch-host
 elasticsearch.port=9200
 initScriptsCM=special-scripts
 initScriptsSecret=special-scripts-sensitive
@@ -236,7 +236,7 @@ initScriptsSecret=special-scripts-sensitive
 The Bitnami Kibana chart allows you to install a set of plugins at deployment time using the `plugins` value:
 
 ```console
-elasticsearch.hosts[0]=elasticsearch-host
+elasticsearch.host[0]=elasticsearch-host
 elasticsearch.port=9200
 plugins[0]=https://github.com/fbaligand/kibana-enhanced-table/releases/download/v1.5.0/enhanced-table-1.5.0_7.3.2.zip
 ```
@@ -282,7 +282,7 @@ This chart requires an Elasticsearch instance to work. For production, you can u
 For the purpose of testing, you can use a sidecar Elasticsearch container setting the following parameters during the Kibana chart installation:
 
 ```
-elasticsearch.hosts[0]=localhost
+elasticsearch.host[0]=localhost
 elasticsearch.port=9200
 sidecars[0].name=elasticsearch
 sidecars[0].image=bitnami/elasticsearch:latest
@@ -349,7 +349,7 @@ This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs
 
 ### To 5.0.0
 
-This version does not include Elasticsearch as a bundled dependency. From now on, you should specify an external Elasticsearch instance using the `elasticsearch.hosts[]` and `elasticsearch.port` [parameters](#parameters).
+This version does not include Elasticsearch as a bundled dependency. From now on, you should specify an external Elasticsearch instance using the `elasticsearch.host[]` and `elasticsearch.port` [parameters](#parameters).
 
 ### To 3.0.0
 
