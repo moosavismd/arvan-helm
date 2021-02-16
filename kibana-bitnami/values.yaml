@@ -472,6 +472,6 @@ metrics:
 ##
 elasticsearch:
   tls: false
-  hosts:
+  host:
   - elasticsearch-1
   port: 9200

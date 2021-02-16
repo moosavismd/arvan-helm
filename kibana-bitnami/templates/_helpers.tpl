@@ -98,17 +98,17 @@ Compile all warnings into a single message, and call fail.
 
 {{/* Validate values of Kibana - must provide an ElasticSearch */}}
 {{- define "kibana.validateValues.noElastic" -}}
-{{- if and (not .Values.elasticsearch.hosts) (not .Values.elasticsearch.port) -}}
+{{- if and (not .Values.elasticsearch.host) (not .Values.elasticsearch.port) -}}
 kibana: no-elasticsearch
     You did not specify an external Elasticsearch instance.
-    Please set elasticsearch.hosts and elasticsearch.port
-{{- else if and (not .Values.elasticsearch.hosts) .Values.elasticsearch.port }}
+    Please set elasticsearch.host and elasticsearch.port
+{{- else if and (not .Values.elasticsearch.host) .Values.elasticsearch.port }}
 kibana: missing-es-settings-host
     You specified the external Elasticsearch port but not the host. Please
-    set elasticsearch.hosts
-{{- else if and .Values.elasticsearch.hosts (not .Values.elasticsearch.port) }}
+    set elasticsearch.host
+{{- else if and .Values.elasticsearch.host (not .Values.elasticsearch.port) }}
 kibana: missing-es-settings-port
-    You specified the external Elasticsearch hosts but not the port. Please
+    You specified the external Elasticsearch host but not the port. Please
     set elasticsearch.port
 {{- end -}}
 {{- end -}}
