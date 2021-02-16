@@ -33,7 +33,7 @@ Return true if the deployment should include dashboards
 {{/*
 Set Elasticsearch Host.
 */}}
-{{- define "kibana.elasticsearch.host" -}}
+{{- define "kibana.elasticsearch.url" -}}
 {{- .Values.elasticsearch.host -}}
 {{- end -}}
 
