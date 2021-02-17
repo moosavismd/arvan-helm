@@ -302,20 +302,20 @@ ingress:
   ##
 
 route:
-  ## If true, Apache server Route will be created (Use it instead of Ingress)
+  ## If true, Kibana Route will be created (Use it instead of Ingress)
   ##
-  enabled: true
-  ## Apache server Route annotations
+  enabled: false
+  ## Kibana server Route annotations
   ##
   annotations: {}
-  ## Apache server Route additional labels
+  ## Kibana server Route additional labels
   ##
   extraLabels: {}
-  ## Apache server Route hostnames with optional path
+  ## Kibana server Route hostnames with optional path
   ##
   host: {}
-  #   - apache.domain.com
-  ## Apache server Route tls config
+  #   - kibana.domain.com
+  ## Kibana server Route tls config
   ##
   tls:
     ## values: Allow, Redirect, None

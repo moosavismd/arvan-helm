@@ -11,10 +11,10 @@ Complete your Kibana deployment by running:
 Replacing "YOUR_ES_HOST" and "YOUR_ES_PORT" placeholders by the proper values of your Elasticsearch deployment.
 
 {{- else -}}
-1. Get the application URL by running these commands:
+1. Get the application URL by running these commands: (be careful by default route is disabled and if you want to enable it beware that it has no authentication and everyone can see it)
 {{- if .Values.route.enabled }}
 
-  ** You should be able to get your new Apache installation route through:
+  ** You should be able to get your new Kibana installation route through:
 
   arvan paas get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.host}" route {{ template "common.names.fullname" . }}
 
