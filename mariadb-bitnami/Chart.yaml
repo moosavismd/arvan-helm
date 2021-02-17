@@ -4,7 +4,7 @@ apiVersion: v2
 appVersion: 10.5.8
 dependencies:
   - name: common
-    repository: https://charts.bitnami.com/bitnami
+    repository: http://buckbuckgo.s3.ir-thr-at1.arvanstorage.com
     tags:
       - bitnami-common
     version: 1.x.x
@@ -21,7 +21,7 @@ keywords:
 maintainers:
   - email: containers@bitnami.com
     name: Bitnami
-name: mariadb
+name: mariadb-bitnami
 sources:
   - https://github.com/bitnami/bitnami-docker-mariadb
   - https://github.com/prometheus/mysqld_exporter

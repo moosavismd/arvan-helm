@@ -236,14 +236,14 @@ primary:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ##
   podSecurityContext:
-    enabled: true
+    enabled: false
     fsGroup: 1001
 
   ## MariaDB primary container security context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ##
   containerSecurityContext:
-    enabled: true
+    enabled: false
     runAsUser: 1001
 
   ## MariaDB primary container's resource requests and limits
@@ -254,12 +254,14 @@ primary:
     # choice for the user. This also increases chances charts run on environments with little
     # resources, such as Minikube. If you do want to specify resources, uncomment the following
     # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    limits: {}
-    #   memory: 256Mi
-    #   cpu: 100m
-    requests: {}
-    #   memory: 256Mi
-    #   cpu: 100m
+    limits: 
+      memory: 256Mi
+      cpu: 100m
+      ephemeral-storage: 512M
+    requests: 
+      memory: 256Mi
+      cpu: 100m
+      ephemeral-storage: 512M
 
   ## MariaDB primary container's liveness and readiness probes
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
@@ -369,7 +371,7 @@ primary:
   service:
     ## Service type
     ##
-    type: ClusterIP
+    type: LoadBalancer
     ## Service port
     ##
     port: 3306
@@ -532,14 +534,14 @@ secondary:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ##
   podSecurityContext:
-    enabled: true
+    enabled: false
     fsGroup: 1001
 
   ## MariaDB secondary container security context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ##
   containerSecurityContext:
-    enabled: true
+    enabled: false
     runAsUser: 1001
 
   ## MariaDB secondary container's resource requests and limits
@@ -550,12 +552,14 @@ secondary:
     # choice for the user. This also increases chances charts run on environments with little
     # resources, such as Minikube. If you do want to specify resources, uncomment the following
     # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    limits: {}
-    #   memory: 256Mi
-    #   cpu: 100m
-    requests: {}
-    #   memory: 256Mi
-    #   cpu: 100m
+    limits:
+      memory: 256Mi
+      cpu: 100m
+      ephemeral-storage: 512M
+    requests:
+      memory: 256Mi
+      cpu: 100m
+      ephemeral-storage: 512M
 
   ## MariaDB secondary container's liveness and readiness probes
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
