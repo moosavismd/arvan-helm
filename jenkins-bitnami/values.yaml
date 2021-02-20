@@ -407,7 +407,7 @@ route:
   ## Jenkins Route hostnames with optional path
   ##
   host: {}
-  #   - nginx.domain.com
+  #   - jenkins.domain.com
   ## Jenkins Route tls config
   ##
   tls:

@@ -196,6 +196,26 @@ ingress:
   ##   certificate:
   ##
 
+route:
+  ## If true, Dokuwiki Route will be created (Use it instead of Ingress)
+  ##
+  enabled: true
+  ## Dokuwiki Route annotations
+  ##
+  annotations: {}
+  ## Dokuwiki Route additional labels
+  ##
+  extraLabels: {}
+  ## Dokuwiki Route hostnames with optional path
+  ##
+  host: {}
+  #   - dokuwiki.domain.com
+  ## Dokuwiki Route tls config
+  ##
+  tls:
+    ## values: Allow, Redirect, None
+    insecureEdgeTerminationPolicy: Allow
+
 ## Enable persistence using Persistent Volume Claims
 ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
 ##
@@ -249,13 +269,13 @@ volumePermissions:
 ## SecurityContext configuration for the pods
 ##
 podSecurityContext:
-  enabled: true
+  enabled: false
   fsGroup: 1001
 
 ## SecurityContext configuration for the container
 ##
 containerSecurityContext:
-  enabled: true
+  enabled: false
   runAsUser: 1001
 
 ## Configure resource requests and limits
@@ -265,6 +285,11 @@ resources:
   requests:
     memory: 512Mi
     cpu: 300m
+    ephemeral-storage: 512M
+  limits:
+    memory: 512Mi
+    cpu: 300m
+    ephemeral-storage: 512M
 
 ## Configure extra options for liveness and readiness probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
