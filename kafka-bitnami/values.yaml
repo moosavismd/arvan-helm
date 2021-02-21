@@ -443,7 +443,7 @@ tolerations: []
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ##
 podSecurityContext:
-  enabled: true
+  enabled: false
   fsGroup: 1001
   runAsUser: 1001
 
@@ -465,12 +465,14 @@ resources:
   # choice for the user. This also increases chances charts run on environments with little
   # resources, such as Minikube. If you do want to specify resources, uncomment the following
   # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  limits: {}
-  #   cpu: 250m
-  #   memory: 1Gi
-  requests: {}
-  #   cpu: 250m
-  #   memory: 256Mi
+  limits: 
+    cpu: 250m
+    memory: 2Gi
+    ephemeral-storage: 1G
+  requests: 
+    cpu: 250m
+    memory: 2Gi
+    ephemeral-storage: 1G
 
 ## Kafka containers' liveness and readiness probes. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
@@ -561,7 +563,7 @@ service:
 externalAccess:
   ## Enable Kubernetes external cluster access to Kafka brokers
   ##
-  enabled: false
+  enabled: true
 
   ## External IPs auto-discovery configuration
   ## An init container is used to auto-detect LB IPs or node ports by querying the K8s API
@@ -570,7 +572,7 @@ externalAccess:
   autoDiscovery:
     ## Enable external IP/ports auto-discovery
     ##
-    enabled: false
+    enabled: true
     ## Bitnami Kubectl image
     ## ref: https://hub.docker.com/r/bitnami/kubectl/tags/
     ##
@@ -598,12 +600,14 @@ externalAccess:
       # choice for the user. This also increases chances charts run on environments with little
       # resources, such as Minikube. If you do want to specify resources, uncomment the following
       # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-      limits: {}
-      #   cpu: 100m
-      #   memory: 128Mi
-      requests: {}
-      #   cpu: 100m
-      #   memory: 128Mi
+      limits: 
+        cpu: 100m
+        memory: 128Mi
+        ephemeral-storage: 512M
+      requests: 
+        cpu: 100m
+        memory: 128Mi
+        ephemeral-storage: 512M
 
   ## Parameters to configure K8s service(s) used to externally access Kafka brokers
   ## A new service per broker will be created
@@ -770,7 +774,8 @@ rbac:
   ## binding Kafka ServiceAccount to a role
   ## that allows Kafka pods querying the K8s API
   ##
-  create: false
+  create: true
+
 
 ## Kafka provisioning
 ##

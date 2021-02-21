@@ -4,13 +4,13 @@ apiVersion: v2
 appVersion: 2.7.0
 dependencies:
   - name: common
-    repository: https://charts.bitnami.com/bitnami
+    repository: https://buckbuckgo.s3.ir-thr-at1.arvanstorage.com
     tags:
       - bitnami-common
     version: 1.x.x
   - condition: zookeeper.enabled
-    name: zookeeper
-    repository: https://charts.bitnami.com/bitnami
+    name: zookeeper-bitnami
+    repository: https://buckbuckgo.s3.ir-thr-at1.arvanstorage.com
     version: 6.x.x
 description: Apache Kafka is a distributed streaming platform.
 engine: gotpl
@@ -25,7 +25,7 @@ keywords:
 maintainers:
   - email: containers@bitnami.com
     name: Bitnami
-name: kafka
+name: kafka-bitnami
 sources:
   - https://github.com/bitnami/bitnami-docker-kafka
   - https://kafka.apache.org/

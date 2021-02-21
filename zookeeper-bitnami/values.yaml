@@ -118,7 +118,7 @@ podManagementPolicy: Parallel
 
 ## Number of ZooKeeper nodes
 ##
-replicaCount: 3
+replicaCount: 1
 
 ## Minimal server ID (ZooKeeper myid) value
 ## servers increment their ID starting at this minimal value.

@@ -1,0 +1,9 @@
+dependencies:
+- name: common
+  repository: https://buckbuckgo.s3.ir-thr-at1.arvanstorage.com
+  version: 1.3.7
+- name: zookeeper-bitnami
+  repository: https://buckbuckgo.s3.ir-thr-at1.arvanstorage.com
+  version: 6.4.0
+digest: sha256:ce760326058ba2b3b6970f397421636e435f44fec69df7acddf61586f28cbd64
+generated: "2021-02-21T15:46:23.8957328+03:30"

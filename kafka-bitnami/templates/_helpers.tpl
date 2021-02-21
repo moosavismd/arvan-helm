@@ -23,7 +23,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- if .Values.zookeeper.fullnameOverride -}}
 {{- .Values.zookeeper.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
-{{- $name := default "zookeeper" .Values.zookeeper.nameOverride -}}
+{{- $name := default "zookeeper-bitnami" .Values.zookeeper.nameOverride -}}
 {{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 {{- end -}}
