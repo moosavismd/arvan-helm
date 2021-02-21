@@ -4,7 +4,7 @@ apiVersion: v2
 appVersion: 3.6.2
 dependencies:
   - name: common
-    repository: https://charts.bitnami.com/bitnami
+    repository: https://buckbuckgo.s3.ir-thr-at1.arvanstorage.com
     tags:
       - bitnami-common
     version: 1.x.x
@@ -17,7 +17,7 @@ keywords:
 maintainers:
   - email: containers@bitnami.com
     name: Bitnami
-name: zookeeper
+name: zookeeper-bitnami
 sources:
   - https://github.com/bitnami/bitnami-docker-zookeeper
   - https://zookeeper.apache.org/
