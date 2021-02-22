@@ -121,7 +121,7 @@ volumePermissions:
 ## MinIO(R) server mode. Allowed values: standalone or distributed.
 ## Distributed Minio ref: https://docs.minio.io/docs/distributed-minio-quickstart-guide
 ##
-mode: standalone
+mode: distributed
 
 ## MinIO(R) deployment parameters
 ## Only when mode is 'standalone'
@@ -211,7 +211,7 @@ command: {}
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 ##
 securityContext:
-  enabled: true
+  enabled: false
   fsGroup: 1001
   runAsUser: 1001
 
@@ -278,12 +278,14 @@ resources:
   # choice for the user. This also increases chances charts run on environments with little
   # resources, such as Minikube. If you do want to specify resources, uncomment the following
   # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  limits: {}
-  #   cpu: 250m
-  #   memory: 256Mi
-  requests: {}
-  #   cpu: 250m
-  #   memory: 256Mi
+  limits: 
+    cpu: 250m
+    memory: 512Mi
+    ephemeral-storage: 512M
+  requests: 
+    cpu: 250m
+    memory: 512Mi
+    ephemeral-storage: 512M
 
 ## MinIO(R) containers' liveness and readiness probes
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
@@ -451,6 +453,26 @@ ingress:
   ##   key:
   ##   certificate:
   ##
+
+route:
+  ## If true, Minio Route will be created (Use it instead of Ingress)
+  ##
+  enabled: true
+  ## Minio Route annotations
+  ##
+  annotations: {}
+  ## Minio Route additional labels
+  ##
+  extraLabels: {}
+  ## Minio Route hostnames with optional path
+  ##
+  host: {}
+  #   - minio.domain.com
+  ## Minio Route tls config
+  ##
+  tls:
+    ## values: Allow, Redirect, None
+    insecureEdgeTerminationPolicy: Allow
 
 ## NetworkPolicy parameters
 ##

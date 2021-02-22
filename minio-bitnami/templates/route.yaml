@@ -1,0 +1,32 @@
+{{- if .Values.route.enabled -}}
+{{- $releaseName := .Release.Name -}}
+{{- $serviceName := include "common.names.fullname" . }}
+{{- $namespaceName := .Release.Namespace -}}
+{{- $postFix := ".apps.ir-thr-at1.arvan.run" -}}
+{{- $defaultDomain :=  printf "%s-%s%s" .serviceName .Release.Namespace .postFix -}}
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+{{- if .Values.route.annotations }}
+  annotations:
+{{ toYaml .Values.route.annotations | indent 4 }}
+{{- end }}
+  labels:
+    {{- include "common.labels.standard" . | nindent 4 }}
+{{- range $key, $value := .Values.route.extraLabels }}
+    {{ $key }}: {{ $value }}
+{{- end }}
+  name: {{ template "common.names.fullname" . }}
+spec:
+  host: {{ .Values.route.host | default .defaultDomain}}
+  port:
+    targetPort: minio
+  to:
+    kind: Service
+    name: {{ $serviceName }}
+    weight: 100
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: {{ .Values.route.tls.insecureEdgeTerminationPolicy }}
+  wildcardPolicy: None
+{{- end -}}
