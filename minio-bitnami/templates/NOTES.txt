@@ -36,7 +36,7 @@ To access the MinIO(R) web UI:
 
 {{- if .Values.route.enabled }}
 
-**  You should be able to get your new Jenkins installation route through:
+**  You should be able to get your new Minio installation route through:
 
   arvan paas get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.host}" route {{ template "common.names.fullname" . }}
 
