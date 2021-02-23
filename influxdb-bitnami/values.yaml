@@ -238,7 +238,7 @@ influxdb:
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ##
   securityContext:
-    enabled: true
+    enabled: false
     fsGroup: 1001
     runAsUser: 1001
 
@@ -250,12 +250,14 @@ influxdb:
     # choice for the user. This also increases chances charts run on environments with little
     # resources, such as Minikube. If you do want to specify resources, uncomment the following
     # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    limits: {}
-    #   cpu: 100m
-    #   memory: 128Mi
-    requests: {}
-    #   cpu: 100m
-    #   memory: 128Mi
+    limits: 
+      cpu: 100m
+      memory: 256Mi
+      ephemeral-storage: 512M
+    requests: 
+      cpu: 100m
+      memory: 256Mi
+      ephemeral-storage: 512M
 
   ## InfluxDB(TM) pods' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
@@ -443,7 +445,7 @@ relay:
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ##
   securityContext:
-    enabled: true
+    enabled: false
     fsGroup: 1001
     runAsUser: 1001
 
@@ -455,12 +457,14 @@ relay:
     # choice for the user. This also increases chances charts run on environments with little
     # resources, such as Minikube. If you do want to specify resources, uncomment the following
     # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    limits: {}
-    #   cpu: 100m
-    #   memory: 128Mi
-    requests: {}
-    #   cpu: 100m
-    #   memory: 128Mi
+    limits:
+      cpu: 100m
+      memory: 256Mi
+      ephemeral-storage: 512M
+    requests:
+      cpu: 100m
+      memory: 256Mi
+      ephemeral-storage: 512M
 
   ## InfluxDB Relay(TM) pods' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
@@ -606,6 +610,26 @@ ingress:
   ##   key:
   ##   certificate:
   ##
+
+route:
+  ## If true, Influxdb Route will be created (Use it instead of Ingress)
+  ##
+  enabled: true
+  ## Influxdb Route annotations
+  ##
+  annotations: {}
+  ## Influxdb Route additional labels
+  ##
+  extraLabels: {}
+  ## Influxdb Route hostnames with optional path
+  ##
+  host: {}
+  #   - influxdb.domain.com
+  ## Influxdb Route tls config
+  ##
+  tls:
+    ## values: Allow, Redirect, None
+    insecureEdgeTerminationPolicy: Allow
 
 ## Prometheus metrics
 ## ref: https://docs.influxdata.com/influxdb/v1.7/administration/server_monitoring/#influxdb-metrics-http-endpoint
