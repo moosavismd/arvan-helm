@@ -251,12 +251,12 @@ influxdb:
     # resources, such as Minikube. If you do want to specify resources, uncomment the following
     # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
     limits: 
-      cpu: 100m
-      memory: 256Mi
+      cpu: 400m
+      memory: 556Mi
       ephemeral-storage: 512M
     requests: 
-      cpu: 100m
-      memory: 256Mi
+      cpu: 400m
+      memory: 556Mi
       ephemeral-storage: 512M
 
   ## InfluxDB(TM) pods' liveness and readiness probes
@@ -458,12 +458,12 @@ relay:
     # resources, such as Minikube. If you do want to specify resources, uncomment the following
     # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
     limits:
-      cpu: 100m
-      memory: 256Mi
+      cpu: 400m
+      memory: 512Mi
       ephemeral-storage: 512M
     requests:
-      cpu: 100m
-      memory: 256Mi
+      cpu: 400m
+      memory: 512Mi
       ephemeral-storage: 512M
 
   ## InfluxDB Relay(TM) pods' liveness and readiness probes
