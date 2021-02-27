@@ -4,13 +4,13 @@ apiVersion: v2
 appVersion: 0.18.0
 dependencies:
   - name: common
-    repository: https://charts.bitnami.com/bitnami
+    repository: https://buckbuckgo.s3.ir-thr-at1.arvanstorage.com
     tags:
       - bitnami-common
     version: 1.x.x
   - condition: minio.enabled
-    name: minio
-    repository: https://charts.bitnami.com/bitnami
+    name: minio-bitnami
+    repository: https://buckbuckgo.s3.ir-thr-at1.arvanstorage.com
     version: 6.x.x
 description: Thanos is a highly available metrics system that can be added on top of existing Prometheus deployments, providing a global query view across all Prometheus installations.
 engine: gotpl
@@ -24,7 +24,7 @@ keywords:
 maintainers:
   - email: containers@bitnami.com
     name: Bitnami
-name: thanos
+name: thanos-bitnami
 sources:
   - https://github.com/bitnami/bitnami-docker-thanos
   - https://thanos.io
