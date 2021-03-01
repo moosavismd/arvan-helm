@@ -5,10 +5,10 @@ appVersion: 5.6.1
 dependencies:
   - condition: mariadb.enabled
     name: mariadb
-    repository: https://charts.bitnami.com/bitnami
+    repository: https://buckbuckgo.s3.ir-thr-at1.arvanstorage.com
     version: 9.x.x
   - name: common
-    repository: https://charts.bitnami.com/bitnami
+    repository: https://buckbuckgo.s3.ir-thr-at1.arvanstorage.com
     tags:
       - bitnami-common
     version: 1.x.x
