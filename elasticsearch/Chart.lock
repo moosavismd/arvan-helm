@@ -1,0 +1,9 @@
+dependencies:
+- name: common
+  repository: https://helm-bitnami.s3.ir-thr-at1.arvanstorage.com
+  version: 1.3.7
+- name: kibana
+  repository: https://helm-bitnami.s3.ir-thr-at1.arvanstorage.com
+  version: 7.2.1
+digest: sha256:1bdf0ea50524f200f4622d2a1e2010589930f7510cae3fda1b6e253363a91e7e
+generated: "2021-03-02T16:53:26.0911105+03:30"

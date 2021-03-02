@@ -1,0 +1,6 @@
+dependencies:
+- name: common
+  repository: http://helm-bitnami.s3.ir-thr-at1.arvanstorage.com
+  version: 1.3.7
+digest: sha256:2b48920a8addf1ef45fb854d5e29b2af0427c1dae83e2ddc3e6f348f7717acaa
+generated: "2021-03-02T16:49:56.1395551+03:30"
