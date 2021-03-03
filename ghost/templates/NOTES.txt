@@ -11,16 +11,24 @@ host. To configure Ghost with the URL of your service:
 
 1. Get the Ghost URL by running:
 
+  {{- if .Values.route.enabled }}
+
+  **  You should be able to get your new Ghost installation route through:
+  
+    arvan paas get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.host}" route {{ template "common.names.fullname" . }}
+  
+  {{- end }}
+
   {{- if contains "NodePort" .Values.service.type }}
 
-  export APP_HOST=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+  export APP_HOST=$(arvan paas get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
 
   {{- else if contains "LoadBalancer" .Values.service.type }}
 
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "common.names.fullname" . }}'
+        Watch the status with: 'arvan paas get svc --namespace {{ .Release.Namespace }} -w {{ template "common.names.fullname" . }}'
 
-  export APP_HOST=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+  export APP_HOST=$(arvan paas get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
 
   {{- end }}
 
@@ -37,29 +45,49 @@ host. To configure Ghost with the URL of your service:
 {{- else -}}
 1. Get the Ghost URL by running:
 
+
+{{- if .Values.route.enabled }}
+
+**  You should be able to get your new Ghost installation route through:
+
+  arvan paas get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.host}" route {{ template "common.names.fullname" . }}
+
+{{- end }}
+
 {{- if eq .Values.service.type "ClusterIP" }}
 
   echo Blog URL  : http://127.0.0.1:{{ default "80" .Values.service.port }}{{ .Values.ghostPath }}
   echo Admin URL : http://127.0.0.1:{{ default "80" .Values.service.port }}{{ default "/" .Values.ghostPath }}ghost
-  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ template "common.names.fullname" . }} {{ default "80" .Values.service.port }}:{{ default "80" .Values.service.port }}
+  arvan paas port-forward --namespace {{ .Release.Namespace }} svc/{{ template "common.names.fullname" . }} {{ default "80" .Values.service.port }}:{{ default "80" .Values.service.port }}
 
 {{- else if eq .Values.service.type "NodePort" }}
-  export APP_HOST=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
-  export APP_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "common.names.fullname" . }})
+  export APP_HOST=$(arvan paas get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+  export APP_PORT=$(arvan paas get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "common.names.fullname" . }})
 
   echo Blog URL  : http://$APP_HOST:$APP_PORT{{ .Values.ghostPath }}
   echo Admin URL : http://$APP_HOST:$APP_PORT{{ default "/" .Values.ghostPath }}ghost
 
 {{- else }}
 
-  echo Blog URL  : http://{{ include "ghost.endpoint" . }}
-  echo Admin URL : http://{{ include "ghost.endpoint" . }}ghost
+  {{- if .Values.route.enabled }}
+  
+    export APP_ROUTE=$(arvan paas get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.host}" route {{ template "common.names.fullname" . }})
+  
+    echo Blog URL  : http://$APP_ROUTE{{ .Values.ghostPath }}
+    echo Admin URL : http://$APP_ROUTE{{ .Values.ghostPath }}ghost
+  {{- else }}
+
+    export SERVICE_IP=$(arvan paas get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+  
+    echo Blog URL  : http://$SERVICE_IP{{ .Values.ghostPath }}
+    echo Admin URL : http://$SERVICE_IP{{ .Values.ghostPath }}ghost
+  {{- end }}
 {{- end }}
 
 2. Get your Ghost login credentials by running:
 
   echo Email:    {{ .Values.ghostEmail }}
-  echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} -o jsonpath="{.data.{{- $ghostPasswordKey -}}}" | base64 --decode)
+  echo Password: $(arvan paas get secret --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} -o jsonpath="{.data.{{- $ghostPasswordKey -}}}" | base64 --decode)
 {{- end }}
 
 {{ include "common.warnings.rollingTag" .Values.image }}

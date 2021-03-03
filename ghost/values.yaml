@@ -77,14 +77,14 @@ volumePermissions:
     ## resources, such as Minikube. If you do want to specify resources, uncomment the following
     ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
     ##
-    limits: {}
-    ##   cpu: 100m
-    ##   memory: 128Mi
-    ##
-    requests: {}
-    ##   cpu: 100m
-    ##   memory: 128Mi
-    ##
+    limits: 
+      cpu: 100m
+      memory: 128Mi
+      ephemeral-storage: 512M
+    requests: 
+      cpu: 100m
+      memory: 128Mi
+      ephemeral-storage: 512M
 
 ## Ghost protocol, host, port and path to create application URLs
 ## ref: https://github.com/bitnami/bitnami-docker-ghost#configuration
@@ -263,7 +263,7 @@ service:
   ## Specify the loadBalancerIP value for LoadBalancer service types.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#loadbalancer
   ##
-  loadBalancerIP:
+  loadBalancerIP: 
 
   ## nodePorts:
   ##   http: <to set explicitly, choose port between 30000-32767>
@@ -284,7 +284,7 @@ service:
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 ##
 podSecurityContext:
-  enabled: true
+  enabled: false
   fsGroup: 1001
   runAsUser: 1001
 
@@ -330,12 +330,14 @@ resources:
   # choice for the user. This also increases chances charts run on environments with little
   # resources, such as Minikube. If you do want to specify resources, uncomment the following
   # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  limits: {}
-  #  cpu: 2
-  #  memory: 1Gi
-  requests: {}
-  #  cpu: 1
-  #  memory: 1Gi
+  limits:
+    cpu: "2"
+    memory: 1Gi
+    ephemeral-storage: 1G
+  requests: 
+    cpu: "2"
+    memory: 1Gi
+    ephemeral-storage: 1G
 
 ## Configure the ingress resource that allows you to access the
 ## Ghost installation. Set up the URL
@@ -420,6 +422,27 @@ ingress:
   ##   key:
   ##   certificate:
   ##
+
+route:
+  ## If true, Ghost Route will be created (Use it instead of Ingress)
+  ##
+  enabled: true
+  ## Ghost Route annotations
+  ##
+  annotations: {}
+  ## Ghost Route additional labels
+  ##
+  extraLabels: {}
+  ## Ghost Route hostnames with optional path
+  ##
+  host: {}
+  #   - ghost.domain.com
+  ## Ghost Route tls config
+  ##
+  tls:
+    ## values: Allow, Redirect, None
+    insecureEdgeTerminationPolicy: Allow
+
 
 ## Pod affinity preset
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
