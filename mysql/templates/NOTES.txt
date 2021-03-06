@@ -3,7 +3,7 @@
 
 Tip:
 
-  Watch the deployment status using the command: kubectl get pods -w --namespace {{ .Release.Namespace }}
+  Watch the deployment status using the command: arvan paas get pods -w --namespace {{ .Release.Namespace }}
 
 Services:
 
@@ -15,13 +15,13 @@ Services:
 Administrator credentials:
 
   echo Username: root
-  echo Password : $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "mysql.secretName" . }} -o jsonpath="{.data.mysql-root-password}" | base64 --decode)
+  echo Password : $(arvan paas get secret --namespace {{ .Release.Namespace }} {{ template "mysql.secretName" . }} -o jsonpath="{.data.mysql-root-password}" | base64 --decode)
 
 To connect to your database:
 
   1. Run a pod that you can use as a client:
 
-      kubectl run {{ include "common.names.fullname" . }}-client --rm --tty -i --restart='Never' --image  {{ template "mysql.image" . }} --namespace {{ .Release.Namespace }} --command -- bash
+      arvan paas run {{ include "common.names.fullname" . }}-client --rm --tty -i --restart='Never'  --limits 'cpu=100m,memory=128Mi,ephemeral-storage=256M' --requests 'cpu=100m,memory=128Mi,ephemeral-storage=256M' --image  {{ template "mysql.image" . }} --namespace {{ .Release.Namespace }} --command -- bash
 
   2. To connect to primary service (read/write):
 
@@ -37,7 +37,7 @@ To connect to your database:
 
 To access the MySQL Prometheus metrics from outside the cluster execute the following commands:
 
-    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ printf "%s-metrics" (include "common.names.fullname" .) }} {{ .Values.metrics.service.port }}:{{ .Values.metrics.service.port }} &
+    arvan paas port-forward --namespace {{ .Release.Namespace }} svc/{{ printf "%s-metrics" (include "common.names.fullname" .) }} {{ .Values.metrics.service.port }}:{{ .Values.metrics.service.port }} &
     curl http://127.0.0.1:{{ .Values.metrics.service.port }}/metrics
 
 {{- end }}
@@ -46,7 +46,7 @@ To upgrade this helm chart:
 
   1. Obtain the password as described on the 'Administrator credentials' section and set the 'root.password' parameter as shown below:
 
-      ROOT_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }}} -o jsonpath="{.data.mysql-root-password}" | base64 --decode)
+      ROOT_PASSWORD=$(arvan paas get secret --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} -o jsonpath="{.data.mysql-root-password}" | base64 --decode)
       helm upgrade {{ .Release.Name }} bitnami/mysql --set auth.rootPassword=$ROOT_PASSWORD
 
 {{ include "mysql.validateValues" . }}
