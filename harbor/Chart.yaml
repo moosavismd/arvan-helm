@@ -5,14 +5,14 @@ appVersion: 2.1.3
 dependencies:
   - condition: postgresql.enabled
     name: postgresql
-    repository: https://charts.bitnami.com/bitnami
+    repository: https://helm-bitnami.s3.ir-thr-at1.arvanstorage.com
     version: 10.x.x
   - condition: redis.enabled
     name: redis
-    repository: https://charts.bitnami.com/bitnami
+    repository: https://helm-bitnami.s3.ir-thr-at1.arvanstorage.com
     version: 12.x.x
   - name: common
-    repository: https://charts.bitnami.com/bitnami
+    repository: https://helm-bitnami.s3.ir-thr-at1.arvanstorage.com
     version: 1.x.x
 description: Harbor is an an open source trusted cloud native registry project that stores, signs, and scans content
 engine: gotpl
