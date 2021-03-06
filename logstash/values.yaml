@@ -27,7 +27,7 @@ image:
   ## Set to true if you would like to see extra information on logs
   ## ref:  https://github.com/bitnami/minideb-extras/#turn-on-bash-debugging
   ##
-  debug: false
+  debug: true
 
 ## Force target Kubernetes version (using Helm capabilites if not set)
 ##
@@ -225,7 +225,7 @@ tolerations: []
 ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 ##
 securityContext:
-  enabled: true
+  enabled: false
   fsGroup: 1001
   runAsUser: 1001
 
@@ -237,12 +237,14 @@ resources:
   # choice for the user. This also increases chances charts run on environments with little
   # resources, such as Minikube. If you do want to specify resources, uncomment the following
   # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  limits: {}
-  #   cpu: 100m
-  #   memory: 128Mi
-  requests: {}
-  #   cpu: 100m
-  #   memory: 128Mi
+  limits: 
+    cpu: 300m
+    memory: 2G
+    ephemeral-storage: 512M
+  requests: 
+    cpu: 300m
+    memory: 2G
+    ephemeral-storage: 512M
 
 ## Logstash pods' liveness and readiness probes
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
@@ -384,6 +386,26 @@ ingress:
   ##   key:
   ##   certificate:
   ##
+
+route:
+  ## If true, Logstash Route will be created (Use it instead of Ingress)
+  ##
+  enabled: true
+  ## Logstash Route annotations
+  ##
+  annotations: {}
+  ## Logstash Route additional labels
+  ##
+  extraLabels: {}
+  ## Logstash Route hostnames with optional path
+  ##
+  host: {}
+  #   - logstash.domain.com
+  ## Logstash Route tls config
+  ##
+  tls:
+    ## values: Allow, Redirect, None
+    insecureEdgeTerminationPolicy: Allow
 
 ## Prometheus metrics
 ##
