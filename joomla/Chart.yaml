@@ -5,10 +5,10 @@ appVersion: 3.9.24
 dependencies:
   - condition: mariadb.enabled
     name: mariadb
-    repository: https://charts.bitnami.com/bitnami
+    repository: https://helm-bitnami.s3.ir-thr-at1.arvanstorage.com
     version: 9.x.x
   - name: common
-    repository: https://charts.bitnami.com/bitnami
+    repository: https://helm-bitnami.s3.ir-thr-at1.arvanstorage.com
     version: 1.x.x
 description: PHP content management system (CMS) for publishing web content
 engine: gotpl
