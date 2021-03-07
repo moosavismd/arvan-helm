@@ -30,7 +30,7 @@ hostAliases: []
 ## ref: https://kubernetes.io/docs/admin/authorization/rbac/
 ##
 rbac:
-  create: true
+  create: false
 
   ## RBAC API version
   ##
@@ -113,7 +113,7 @@ collectors:
 ## SecurityContext configuration
 ##
 securityContext:
-  enabled: true
+  enabled: false
   runAsUser: 1001
   fsGroup: 1001
 
@@ -165,12 +165,14 @@ resources:
   # choice for the user. This also increases chances charts run on environments with little
   # resources, such as Minikube. If you do want to specify resources, uncomment the following
   # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  limits: {}
-  #   cpu: 100m
-  #   memory: 128Mi
-  requests: {}
-  #   cpu: 100m
-  #   memory: 128Mi
+  limits: 
+    cpu: 100m
+    memory: 128Mi
+    ephemeral-storage: 512M
+  requests:
+    cpu: 100m
+    memory: 128Mi
+    ephemeral-storage: 512M
 
 ## Number of replicas
 ##
