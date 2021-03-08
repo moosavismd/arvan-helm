@@ -1,1 +1,18 @@
 
+** Please be patient while the chart is being deployed **
+
+To access your Zabbix from outside the cluster follow the steps below:
+
+{{- if .Values.route.enabled }}
+
+**  You should be able to get your new Zabbix installation route through:
+
+  arvan paas get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.host}" route {{ template "common.names.fullname" . }}
+
+{{- end }}
+
+The default username and password for zabbix installation is :
+username: Admin
+password: zabbix
+
+**** CHANGE IT ASAP ****

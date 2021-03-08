@@ -19,10 +19,10 @@ metadata:
 spec:
   host: {{ .Values.route.host | default .defaultDomain}}
   port:
-    targetPort: http
+    targetPort: zabbix-web
   to:
     kind: Service
-    name: {{ $serviceName }}
+    name: zabbix-web
     weight: 100
   tls:
     termination: edge
