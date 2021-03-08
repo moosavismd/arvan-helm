@@ -174,11 +174,15 @@ redis:
   ## Redis(TM) resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
-  resources: {}
-  #   requests:
-  #     memory: 256Mi
-  #     cpu: 100m
-
+  resources:
+    requests:
+      memory: 256Mi
+      cpu: 100m
+      ephemeral-storage: 256M
+    limits: 
+      memory: 256Mi
+      cpu: 100m
+      ephemeral-storage: 256M
   ## Use an alternate scheduler, e.g. "stork".
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
@@ -386,15 +390,14 @@ initJob:
     ## resources, such as Minikube. If you do want to specify resources, uncomment the following
     ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
     ##
-    limits: {}
-    ##   cpu: 500m
-    ##   memory: 1Gi
-    ##
-    requests: {}
-    ##   cpu: 250m
-    ##   memory: 256Mi
-    ##
-
+    requests:
+      memory: 256Mi
+      cpu: 100m
+      ephemeral-storage: 256M
+    limits:
+      memory: 256Mi
+      cpu: 100m
+      ephemeral-storage: 256M
 ## Cluster update job settings
 ##
 updateJob:
@@ -517,14 +520,14 @@ updateJob:
     ## resources, such as Minikube. If you do want to specify resources, uncomment the following
     ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
     ##
-    limits: {}
-    ##   cpu: 500m
-    ##   memory: 1Gi
-    ##
-    requests: {}
-    ##   cpu: 250m
-    ##   memory: 256Mi
-    ##
+    requests:
+      memory: 256Mi
+      cpu: 100m
+      ephemeral-storage: 256M
+    limits:
+      memory: 256Mi
+      cpu: 100m
+      ephemeral-storage: 256M
 
 networkPolicy:
   ## Specifies whether a NetworkPolicy should be created
@@ -573,7 +576,7 @@ rbac:
 ## Redis(TM) pod Security Context
 ##
 podSecurityContext:
-  enabled: true
+  enabled: false
   fsGroup: 1001
   runAsUser: 1001
   ## sysctl settings
@@ -598,7 +601,7 @@ podDisruptionBudget: {}
 ## Containers Security Context
 ##
 containerSecurityContext:
-  enabled: true
+  enabled: false
   runAsUser: 1001
   ## sysctl settings
   ##

@@ -4,7 +4,7 @@ apiVersion: v2
 appVersion: 6.0.10
 dependencies:
   - name: common
-    repository: https://charts.bitnami.com/bitnami
+    repository: https://helm-bitnami.s3.ir-thr-at1.arvanstorage.com
     tags:
       - bitnami-common
     version: 1.x.x

@@ -11,9 +11,9 @@ To get your password run:
 To connect to your Redis(TM) server from outside the cluster check the following information:
 
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ template "common.names.fullname" . }}'
+        Watch the status with: 'arvan paas get svc --namespace {{ .Release.Namespace }} -w {{ template "common.names.fullname" . }}'
 
-    You will have a different external IP for each Redis(TM) node. Get the external ip from `-external` suffixed services: `kubectl get svc`.
+    You will have a different external IP for each Redis(TM) node. Get the external ip from `-external` suffixed services: `arvan paas get svc`.
     Redis(TM) port: {{ .Values.cluster.externalAccess.service.port }}
 
     {{- if not .Values.cluster.externalAccess.service.loadBalancerIP }}
@@ -28,7 +28,7 @@ To connect to your Redis(TM) server from outside the cluster check the following
 
     To connect to your database from outside the cluster execute the following commands:
 
-    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+    export SERVICE_IP=$(arvan paas get svc --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
     redis-cli -c -h $SERVICE_IP -p {{ .Values.service.port }} {{- if .Values.usePassword }} -a $REDIS_PASSWORD{{ end }}{{ if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
     {{- end }}
 
@@ -45,21 +45,21 @@ To connect to your Redis(TM) cluster:
 1. Run a Redis(TM) pod that you can use as a client:
 
 {{- if .Values.tls.enabled }}
-   kubectl run --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }}-client --restart='Never' --env REDIS_PASSWORD=$REDIS_PASSWORD --image {{ template "redis-cluster.image" . }} --command -- sleep infinity
+   arvan paas run --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }}-client  --limits 'cpu=100m,memory=128Mi,ephemeral-storage=256M' --requests 'cpu=100m,memory=128Mi,ephemeral-storage=256M' --restart='Never' --env REDIS_PASSWORD=$REDIS_PASSWORD --image {{ template "redis-cluster.image" . }} --command -- sleep infinity
 
    Copy your TLS certificates to the pod:
 
-   kubectl cp --namespace {{ .Release.Namespace }} /path/to/client.cert {{ template "common.names.fullname" . }}-client:/tmp/client.cert
-   kubectl cp --namespace {{ .Release.Namespace }} /path/to/client.key {{ template "common.names.fullname" . }}-client:/tmp/client.key
-   kubectl cp --namespace {{ .Release.Namespace }} /path/to/CA.cert {{ template "common.names.fullname" . }}-client:/tmp/CA.cert
+   arvan paas cp --namespace {{ .Release.Namespace }} /path/to/client.cert {{ template "common.names.fullname" . }}-client:/tmp/client.cert
+   arvan paas cp --namespace {{ .Release.Namespace }} /path/to/client.key {{ template "common.names.fullname" . }}-client:/tmp/client.key
+   arvan paas cp --namespace {{ .Release.Namespace }} /path/to/CA.cert {{ template "common.names.fullname" . }}-client:/tmp/CA.cert
 
    Use the following command to attach to the pod:
 
-   kubectl exec --tty -i {{ template "common.names.fullname" . }}-client \
+   arvan paas exec --tty -i {{ template "common.names.fullname" . }}-client \
    {{- if and (.Values.networkPolicy.enabled) (not .Values.networkPolicy.allowExternal) }}--labels="{{ template "common.names.fullname" . }}-client=true" \{{- end }}
    --namespace {{ .Release.Namespace }} -- bash
 {{- else }}
-kubectl run --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }}-client --rm --tty -i --restart='Never' \
+arvan paas run --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }}-client  --limits 'cpu=100m,memory=128Mi,ephemeral-storage=256M' --requests 'cpu=100m,memory=128Mi,ephemeral-storage=256M' --rm --tty -i --restart='Never' \
 {{ if .Values.usePassword }} --env REDIS_PASSWORD=$REDIS_PASSWORD \{{ end }}
 {{- if and (.Values.networkPolicy.enabled) (not .Values.networkPolicy.allowExternal) }}--labels="{{ template "common.names.fullname" . }}-client=true" \{{- end }}
 --image {{ template "redis-cluster.image" . }} -- bash
