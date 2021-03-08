@@ -45,17 +45,18 @@ spec:
               {{- end}}    
           env:
             - name: DB_SERVER_HOST
-              value: {{ .Values.zabbixServer.DB_SERVER_HOST }}
+              value: {{ include "zabbix.databaseHost" . | quote }}
             - name: POSTGRES_USER
               value: {{ .Values.zabbixServer.POSTGRES_USER }}
             - name: POSTGRES_PASSWORD
               value: {{ .Values.zabbixServer.POSTGRES_PASSWORD }}
             - name: POSTGRES_DB
               value: {{ .Values.zabbixServer.POSTGRES_DB }}
+          {{- if .Values.resources }}
+          resources: {{ toYaml .Values.zabbixServer.resources | nindent 12 }}
+          {{- end }}
           {{- if .Values.zabbixagent.enabled }}
         - name: zabbix-agent
-          securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.zabbixagent.image.repository }}:{{ .Values.zabbixagent.image.tag }}"
           imagePullPolicy: {{ .Values.zabbixServer.image.pullPolicy }}
           env:
@@ -83,11 +84,12 @@ spec:
             - name: zabbix-agent
               containerPort: 10050
               protocol: TCP
+          {{- if .Values.resources }}
+          resources: {{ toYaml .Values.zabbixagent.resources | nindent 12 }}
+          {{- end }}
           {{- end }}
         {{- if .Values.zabbixproxy.enabled }}
         - name: zabbix-proxy
-          securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.zabbixproxy.image.repository }}:{{ .Values.zabbixproxy.image.tag }}"
           imagePullPolicy: {{ .Values.zabbixServer.image.pullPolicy }}
           env:
@@ -125,6 +127,9 @@ spec:
             - name: http
               containerPort: 10051
               protocol: TCP
+          {{- if .Values.resources }}
+          resources: {{ toYaml .Values.zabbixproxy.resources | nindent 12 }}
+          {{- end }}
         {{- end }}
       imagePullSecrets:
       {{- range .Values.zabbixServer.image.pullSecrets }}

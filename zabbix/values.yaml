@@ -19,8 +19,6 @@ zabbixServer:
     pullPolicy: IfNotPresent
     # -- List of dockerconfig secrets names to use when pulling images
     pullSecrets: []
-  # -- Address of database host
-  DB_SERVER_HOST: "zabbix-postgresql"
   # -- User of database
   POSTGRES_USER: "zabbix"
   # -- Password of database
@@ -32,6 +30,15 @@ zabbixServer:
     type: ClusterIP
     # -- Port of service in Kubernetes cluster
     port: 10051
+  resources:
+    limits:
+      cpu: 200m
+      memory: 512Mi
+      ephemeral-storage: 512M
+    requests:
+      cpu: 200m
+      memory: 512Mi
+      ephemeral-storage: 512M
 
 # **PostgreSQL** configurations
 postgresql:
@@ -99,6 +106,15 @@ zabbixproxy:
     port: 10051
     # -- Port of application pod
     targetPort: 10051
+  resources:
+    limits:
+      cpu: 200m
+      memory: 512Mi
+      ephemeral-storage: 512M
+    requests:
+      cpu: 200m
+      memory: 512Mi
+      ephemeral-storage: 512M
 
 # **Zabbix agent** configurations
 zabbixagent:
@@ -147,6 +163,16 @@ zabbixagent:
     # -- Port of application pod
     targetPort: 10050
 
+  resources:
+    limits:
+      cpu: 200m
+      memory: 512Mi
+      ephemeral-storage: 512M
+    requests:
+      cpu: 200m
+      memory: 512Mi
+      ephemeral-storage: 512M
+
 # **Zabbix web** configurations
 zabbixweb:
   # -- Enables use of Zabbix web
@@ -164,8 +190,6 @@ zabbixweb:
   ZBX_SERVER_HOST: zabbix-server
   # -- Zabbix server port
   ZBX_SERVER_PORT: 10051
-  # -- Address of database host
-  DB_SERVER_HOST: zabbix-postgresql
   # -- Port of database
   DB_SERVER_PORT: 5432
   # -- User of database
@@ -176,12 +200,21 @@ zabbixweb:
   POSTGRES_DB: zabbix
   service:
     # -- Type of service for Zabbix web
-    type: NodePort
+    type: LoadBalancer
     # -- Port to expose service
     port: 80
     # -- Port of application pod
     targetPort: 8080
 
+  resources:
+    limits:
+      cpu: 200m
+      memory: 512Mi
+      ephemeral-storage: 512M
+    requests:
+      cpu: 200m
+      memory: 512Mi
+      ephemeral-storage: 512M
 # Ingress configurations
 ingress:
   # -- Enables Ingress
@@ -198,17 +231,39 @@ ingress:
   #    hosts:
   #      - chart-example.local
 
+route:
+  ## If true, Zabbix Route will be created (Use it instead of Ingress)
+  ##
+  enabled: true
+  ## Zabbix Route annotations
+  ##
+  annotations: {}
+  ## Zabbix Route additional labels
+  ##
+  extraLabels: {}
+  ## Zabbix Route hostnames with optional path
+  ##
+  host: {}
+  #   - zabbix.domain.com
+  ## Zabbix Route tls config
+  ##
+  tls:
+    ## values: Allow, Redirect, None
+    insecureEdgeTerminationPolicy: Allow
+
 # -- We usually recommend not to specify default resources and to leave this as a conscious
 # choice for the user. This also increases chances charts run on environments with little
 # resources, such as Minikube. If you do want to specify resources, uncomment the following
 # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-resources: {}
-# ```limits:
-#   cpu: 100m
-#   memory: 128Mi
-# requests:
-#   cpu: 100m
-#   memory: 128Mi```
+resources: 
+  limits:
+    cpu: 200m
+    memory: 512Mi
+    ephemeral-storage: 512M
+  requests:
+    cpu: 200m 
+    memory: 512Mi
+    ephemeral-storage: 512M
 
 livenessProbe:
   # -- Path of health check of application
@@ -238,6 +293,9 @@ readinessProbe:
   # -- Minimum consecutive successes for the probe to be considered successful after having failed
   successThreshold: 1
 
+# -- default value for external db
+externalDatabase:
+  host: zabbix-postgresql
 # -- nodeSelector configurations
 nodeSelector: {}
 

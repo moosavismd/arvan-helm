@@ -1,0 +1,31 @@
+{{- if .Values.route.enabled -}}
+{{- $releaseName := .Release.Name -}}
+{{- $serviceName := include "zabbix.fullname" . }}
+{{- $namespaceName := .Release.Namespace -}}
+{{- $postFix := ".apps.ir-thr-at1.arvan.run" -}}
+{{- $defaultDomain :=  printf "%s-%s%s" .serviceName .Release.Namespace .postFix -}}
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+{{- if .Values.route.annotations }}
+  annotations:
+{{ toYaml .Values.route.annotations | indent 4 }}
+{{- end }}
+  labels:
+{{- range $key, $value := .Values.route.extraLabels }}
+    {{ $key }}: {{ $value }}
+{{- end }}
+  name: {{ template "zabbix.fullname" . }}
+spec:
+  host: {{ .Values.route.host | default .defaultDomain}}
+  port:
+    targetPort: http
+  to:
+    kind: Service
+    name: {{ $serviceName }}
+    weight: 100
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: {{ .Values.route.tls.insecureEdgeTerminationPolicy }}
+  wildcardPolicy: None
+{{- end -}}

@@ -24,8 +24,6 @@ spec:
     spec:
       containers:
       - name: zabbix-web
-        securityContext:
-          {{- toYaml .Values.securityContext | nindent 12 }}
         image: "{{ .Values.zabbixweb.image.repository }}:{{ .Values.zabbixweb.image.tag }}"
         imagePullPolicy: {{ .Values.zabbixweb.image.pullPolicy }}
         env:
@@ -34,7 +32,7 @@ spec:
           - name: ZBX_SERVER_PORT
             value: {{ .Values.zabbixweb.ZBX_SERVER_PORT | quote }}
           - name: DB_SERVER_HOST
-            value: {{ .Values.zabbixweb.DB_SERVER_HOST | quote }}
+            value: {{ include "zabbix.databaseHost" . | quote }}
           - name: DB_SERVER_PORT
             value: {{ .Values.zabbixweb.DB_SERVER_PORT | quote }}
           - name: POSTGRES_USER
@@ -51,6 +49,9 @@ spec:
           - name: zabbix-web
             containerPort: 8080
             protocol: TCP
+        {{- if .Values.resources }}
+        resources: {{ toYaml .Values.zabbixweb.resources | nindent 12 }}
+        {{- end }}
         livenessProbe:
           httpGet:
             path: {{ .Values.livenessProbe.path }}
