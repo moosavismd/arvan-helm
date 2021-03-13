@@ -41,13 +41,13 @@ image:
 
 ## Cluster settings
 cluster:
-  enabled: false
-  slaveCount: 2
-
+  enabled: true
+  slaveCount: 3
+  masterCount: 3
 ## Use redis sentinel in the redis pod. This will disable the master and slave services and
 ## create one redis service with ports to the sentinel and the redis instances
 sentinel:
-  enabled: false
+  enabled: true
   ## Require password authentication on the sentinel itself
   ## ref: https://redis.io/topics/sentinel
   usePassword: true
@@ -125,7 +125,7 @@ sentinel:
   ## Redis(TM) Sentinel Service properties
   service:
     ##  Redis(TM) Sentinel Service type
-    type: ClusterIP
+    type: LoadBalancer
     sentinelPort: 26379
     redisPort: 6379
 
@@ -473,15 +473,15 @@ master:
     volumeClaimTemplates:
       labels: {}
       annotations: {}
-#    resources:
-#      requests:
-#        memory: 256Mi
-#        cpu: 100m
-#        ephemeral-storage: 512M
-#      limits:
-#        memory: 256Mi
-#        cpu: 100m
-#        ephemeral-storage: 512M
+    resources:
+      requests:
+        memory: 256Mi
+        cpu: 100m
+        ephemeral-storage: 512M
+      limits:
+        memory: 256Mi
+        cpu: 100m
+        ephemeral-storage: 512M
   ## Redis(TM) Master pod priorityClassName
   ##
   priorityClassName: ''
@@ -617,10 +617,15 @@ slave:
   customReadinessProbe: {}
 
   ## Redis(TM) slave Resource
-  # resources:
-  #   requests:
-  #     memory: 256Mi
-  #     cpu: 100m
+  resources:
+     requests:
+       memory: 256Mi
+       cpu: 100m
+       ephemeral-storage: 512M
+     limits:
+       memory: 256Mi
+       cpu: 100m
+       ephemeral-storage: 512M
 
   ## Redis(TM) slave selectors and tolerations for pod assignment
   # nodeSelector: {"beta.kubernetes.io/arch": "amd64"}
@@ -677,15 +682,15 @@ slave:
     volumeClaimTemplates:
       labels: {}
       annotations: {}
-#    resource:
-#      requests:
-#        memory: 256Mi
-#        cpu: 100m
-#        ephemeral-storage: 512M
-#      limits:
-#        memory: 256Mi
-#        cpu: 100m
-#        ephemeral-storage: 512M
+    resource:
+      requests:
+        memory: 256Mi
+        cpu: 100m
+        ephemeral-storage: 512M
+      limits:
+        memory: 256Mi
+        cpu: 100m
+        ephemeral-storage: 512M
 
   ## An array to add extra env vars
   ## For example:
