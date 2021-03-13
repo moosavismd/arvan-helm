@@ -9,7 +9,7 @@ rules:
   - apiGroups: [""]
     resources: ["endpoints"]
     verbs: ["get"]
-  - apiGroups: [""]
-    resources: ["events"]
-    verbs: ["create"]
+#  - apiGroups: [""]
+#    resources: ["events"]
+#    verbs: ["create"]
 {{- end }}

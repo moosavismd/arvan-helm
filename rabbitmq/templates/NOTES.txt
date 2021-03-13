@@ -4,12 +4,21 @@
 Credentials:
 
     echo "Username      : {{ .Values.auth.username }}"
-    echo "Password      : $(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "rabbitmq.secretPasswordName" . }} -o jsonpath="{.data.rabbitmq-password}" | base64 --decode)"
-    echo "ErLang Cookie : $(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "rabbitmq.secretErlangName" . }} -o jsonpath="{.data.rabbitmq-erlang-cookie}" | base64 --decode)"
+    echo "Password      : $(arvan paas get secret --namespace {{ .Release.Namespace }} {{ include "rabbitmq.secretPasswordName" . }} -o jsonpath="{.data.rabbitmq-password}" | base64 --decode)"
+    echo "ErLang Cookie : $(arvan paas get secret --namespace {{ .Release.Namespace }} {{ include "rabbitmq.secretErlangName" . }} -o jsonpath="{.data.rabbitmq-erlang-cookie}" | base64 --decode)"
 
 RabbitMQ can be accessed within the cluster on port {{ .Values.service.nodePort }} at {{ include "rabbitmq.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clustering.k8s_domain }}
 
 To access for outside the cluster, perform the following steps:
+
+
+{{- if .Values.route.enabled }}
+
+**  You should be able to get your new RabbitMQ installation route through:
+
+  arvan paas get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.host}" route {{ template "common.names.fullname" . }}
+
+{{- end }}
 
 {{- if .Values.ingress.enabled }}
 {{- if contains "NodePort" .Values.service.type }}
@@ -18,8 +27,8 @@ To Access the RabbitMQ AMQP port:
 
 1. Obtain the NodePort IP and ports:
 
-    export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
-    export NODE_PORT_AMQP=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[1].nodePort}" services {{ include "rabbitmq.fullname" . }})
+    export NODE_IP=$(arvan paas get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+    export NODE_PORT_AMQP=$(arvan paas get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[1].nodePort}" services {{ include "rabbitmq.fullname" . }})
     echo "URL : amqp://$NODE_IP:$NODE_PORT_AMQP/"
 
 {{- else if contains "LoadBalancer" .Values.service.type }}
@@ -29,9 +38,9 @@ To Access the RabbitMQ AMQP port:
 1. Obtain the LoadBalancer IP:
 
 NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-      Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ include "rabbitmq.fullname" . }}'
+      Watch the status with: 'arvan paas get svc --namespace {{ .Release.Namespace }} -w {{ include "rabbitmq.fullname" . }}'
 
-    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "rabbitmq.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+    export SERVICE_IP=$(arvan paas get svc --namespace {{ .Release.Namespace }} {{ include "rabbitmq.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
     echo "URL : amqp://$SERVICE_IP:{{ .Values.service.port }}/"
 
 {{- else if contains "ClusterIP"  .Values.service.type }}
@@ -40,7 +49,7 @@ To Access the RabbitMQ AMQP port:
 
 1. Create a port-forward to the AMQP port:
 
-    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "rabbitmq.fullname" . }} {{ .Values.service.port }}:{{ .Values.service.port }} &
+    arvan paas port-forward --namespace {{ .Release.Namespace }} svc/{{ include "rabbitmq.fullname" . }} {{ .Values.service.port }}:{{ .Values.service.port }} &
     echo "URL : amqp://127.0.0.1:{{ .Values.service.port }}/"
 
 {{- end }}
@@ -51,7 +60,7 @@ To Access the RabbitMQ Management interface:
 
 1. Get the RabbitMQ Management URL and associate its hostname to your cluster external IP:
 
-   export CLUSTER_IP=$(minikube ip) # On Minikube. Use: `kubectl cluster-info` on others K8s clusters
+   export CLUSTER_IP=$(minikube ip) # On Minikube. Use: `arvan paas cluster-info` on others K8s clusters
    echo "RabbitMQ Management: http{{ if .Values.ingress.tls }}s{{ end }}://{{ .Values.ingress.hostname }}/"
    echo "$CLUSTER_IP  {{ .Values.ingress.hostname }}" | sudo tee -a /etc/hosts
 
@@ -62,9 +71,9 @@ To Access the RabbitMQ Management interface:
 
 Obtain the NodePort IP and ports:
 
-    export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
-    export NODE_PORT_AMQP=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[1].nodePort}" services {{ include "rabbitmq.fullname" . }})
-    export NODE_PORT_STATS=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[3].nodePort}" services {{ include "rabbitmq.fullname" . }})
+    export NODE_IP=$(arvan paas get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+    export NODE_PORT_AMQP=$(arvan paas get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[1].nodePort}" services {{ include "rabbitmq.fullname" . }})
+    export NODE_PORT_STATS=$(arvan paas get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[3].nodePort}" services {{ include "rabbitmq.fullname" . }})
 
 To Access the RabbitMQ AMQP port:
 
@@ -79,9 +88,9 @@ To Access the RabbitMQ Management interface:
 Obtain the LoadBalancer IP:
 
 NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-      Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ include "rabbitmq.fullname" . }}'
+      Watch the status with: 'arvan paas get svc --namespace {{ .Release.Namespace }} -w {{ include "rabbitmq.fullname" . }}'
 
-    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "rabbitmq.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+    export SERVICE_IP=$(arvan paas get svc --namespace {{ .Release.Namespace }} {{ include "rabbitmq.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
 
 To Access the RabbitMQ AMQP port:
 
@@ -96,12 +105,12 @@ To Access the RabbitMQ Management interface:
 To Access the RabbitMQ AMQP port:
 
     echo "URL : amqp://127.0.0.1:{{ .Values.service.port }}/"
-    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "rabbitmq.fullname" . }} {{ .Values.service.port }}:{{ .Values.service.port }}
+    arvan paas port-forward --namespace {{ .Release.Namespace }} svc/{{ include "rabbitmq.fullname" . }} {{ .Values.service.port }}:{{ .Values.service.port }}
 
 To Access the RabbitMQ Management interface:
 
     echo "URL : http://127.0.0.1:{{ .Values.service.managerPort }}/"
-    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "rabbitmq.fullname" . }} {{ .Values.service.managerPort }}:{{ .Values.service.managerPort }}
+    arvan paas port-forward --namespace {{ .Release.Namespace }} svc/{{ include "rabbitmq.fullname" . }} {{ .Values.service.managerPort }}:{{ .Values.service.managerPort }}
 
 {{- end }}
 {{- end }}
@@ -110,7 +119,7 @@ To Access the RabbitMQ Management interface:
 
 To access the RabbitMQ Prometheus metrics, get the RabbitMQ Prometheus URL by running:
 
-    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "rabbitmq.fullname" . }} {{ .Values.service.metricsPort }}:{{ .Values.service.metricsPort }} &
+    arvan paas port-forward --namespace {{ .Release.Namespace }} svc/{{ include "rabbitmq.fullname" . }} {{ .Values.service.metricsPort }}:{{ .Values.service.metricsPort }} &
     echo "Prometheus Metrics URL: http://127.0.0.1:{{ .Values.service.metricsPort }}/metrics"
 
 Then, open the obtained URL in a browser.

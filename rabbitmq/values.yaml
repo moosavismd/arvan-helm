@@ -422,7 +422,7 @@ tolerations: []
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ##
 podSecurityContext:
-  enabled: true
+  enabled: false
   fsGroup: 1001
   runAsUser: 1001
 
@@ -444,12 +444,14 @@ resources:
   # choice for the user. This also increases chances charts run on environments with little
   # resources, such as Minikube. If you do want to specify resources, uncomment the following
   # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  limits: {}
-  #   cpu: 1000m
-  #   memory: 2Gi
-  requests: {}
-  #   cpu: 1000m
-  #   memory: 2Gi
+  limits:
+    cpu: 1000m
+    memory: 2Gi
+    ephemeral-storage: 512M
+  requests: 
+    cpu: 1000m
+    memory: 2Gi
+    ephemeral-storage: 512M
 
 ## RabbitMQ containers' liveness and readiness probes.
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
@@ -601,7 +603,7 @@ networkPolicy:
 ## Kubernetes service type
 ##
 service:
-  type: ClusterIP
+  type: LoadBalancer
   ## Amqp port
   ## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
   ##
@@ -787,6 +789,25 @@ ingress:
   ##   certificate:
   ##
 
+route:
+  ## If true, RabbitMQ Route will be created (Use it instead of Ingress)
+  ##
+  enabled: true
+  ## RabbitMQ Route annotations
+  ##
+  annotations: {}
+  ## RabbitMQ Route additional labels
+  ##
+  extraLabels: {}
+  ## RabbitMQ Route hostnames with optional path
+  ##
+  host: {}
+  #   - rabbitmq.domain.com
+  ## RabbitMQ Route tls config
+  ##
+  tls:
+    ## values: Allow, Redirect, None
+    insecureEdgeTerminationPolicy: Allow
 ## Prometheus Metrics
 ##
 metrics:
