@@ -22,6 +22,23 @@ Return the proper image name to change the volume permissions
 {{ include "common.images.image" (dict "imageRoot" .Values.volumePermissions.image "global" .Values.global) }}
 {{- end -}}
 
+
+{{- define "ghost.ServiceName" -}}
+{{ include "common.names.fullname" . }}
+{{- end -}}
+
+{{- define "ghost.PostFix" -}}
+{{ default ".apps.ir-thr-at1.arvan.run" -}}
+{{- end }}
+
+{{- define "ghost.DefaultDomain" -}}
+{{ printf "%s-%s%s" (include "common.names.fullname" .) .Release.Namespace ".apps.ir-thr-at1.arvan.run" -}}
+{{- end -}}
+
+{{- define "ghost.Route" -}}
+{{ .Values.route.host | default .defaultDomain}}
+{{- end -}}
+
 {{/*
 Return the proper Docker Image Registry Secret Names
 */}}
